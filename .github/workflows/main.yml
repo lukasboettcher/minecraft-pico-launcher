@@ -25,11 +25,18 @@ jobs:
       - name: Install pyinstaller
         run: pip install pyinstaller
 
-      - name: Run a multi-line script
+      - name: Build executable
         run: pyinstaller -F launcher.py
       
-      - name: Upload a Build Artifact
+      - name: Upload a Build Artifact (unix)
         uses: actions/upload-artifact@v2.2.4
+        if: matrix.os != windows-latest
         with:
-          name: launcher
+          name: launcher-${{ matrix.os }}
           path: dist/launcher
+      - name: Upload a Build Artifact (windows)
+        uses: actions/upload-artifact@v2.2.4
+        if: matrix.os == windows-latest
+        with:
+          name: launcher-${{ matrix.os }}.exe
+          path: dist\launcher
