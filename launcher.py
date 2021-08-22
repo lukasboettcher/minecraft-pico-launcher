@@ -414,8 +414,19 @@ class Start:
             **opts.features
         }
 
+        username_file_path = path.join(get_minecraft_dir(), 'username.dat')
+        last_username = None
+        if os.path.exists(username_file_path):
+            last_username = open(username_file_path).readline()
+
+
         uuid = uuid4().hex if opts.uuid is None else opts.uuid.replace("-", "").lower()
         username = uuid[:8] if opts.username is None else opts.username[:16]  # Max username length is 16
+
+        username = opts.username[:16] if opts.username is not None else uuid[:8] if last_username is None else last_username
+
+        with open(username_file_path, 'w') as username_file:
+            username_file.write(username)
 
         print(f"Starting Minecraft with username: {username}")
 
@@ -969,6 +980,8 @@ if __name__ == "__main__":
     def register_arguments() -> ArgumentParser:
 
         parser = ArgumentParser(allow_abbrev=False, prog="launcher")
+        parser.add_argument("--main-dir")
+        parser.add_argument("--work-dir")
         parser.add_argument("--dry", action="store_true")
         parser.add_argument("--disable-mp", action="store_true")
         parser.add_argument("--disable-chat", action="store_true")
@@ -1029,3 +1042,4 @@ if __name__ == "__main__":
     
 
     main()
+
