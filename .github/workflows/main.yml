@@ -26,7 +26,9 @@ jobs:
         run: pip install pyinstaller
 
       - name: Build executable
-        run: pyinstaller -F launcher.py
+        run: |
+          pyinstaller -F launcher.py
+          dir dist
       
       - name: Upload a Build Artifact (unix)
         uses: actions/upload-artifact@v2.2.4
