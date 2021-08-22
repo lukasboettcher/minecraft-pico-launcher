@@ -39,4 +39,4 @@ jobs:
         if: matrix.os == 'windows-latest'
         with:
           name: launcher-${{ matrix.os }}.exe
-          path: .\\dist\\launcher
+          path: dist/launcher.exe
