@@ -90,37 +90,3 @@ jobs:
           asset_content_type: application/octet-stream
 
 
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3'
-
-      - name: Install pyinstaller
-        run: pip install pyinstaller
-
-      - name: Build executable
-        run: pyinstaller -F launcher.py
-      
-      - name: Create a Build Artifact (unix)
-        uses: actions/upload-artifact@v2.2.4
-        if: matrix.os != 'windows-latest'
-        with:
-          name: launcher-${{ matrix.os }}
-          path: dist/launcher
-          
-      - name: Create a Build Artifact (windows)
-        uses: actions/upload-artifact@v2.2.4
-        if: matrix.os == 'windows-latest'
-        with:
-          name: launcher-${{ matrix.os }}.exe
-          path: dist/launcher.exe
-
-
