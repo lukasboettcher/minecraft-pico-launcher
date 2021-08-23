@@ -47,19 +47,13 @@ jobs:
           
       - name: Install pyinstaller
         run: |
-          pip install wheel pyoxidizer
           git clone https://github.com/pyinstaller/pyinstaller.git
           cd pyinstaller/bootloader
           python ./waf all
           cd ..; python setup.py install
 
-      - name: Build executable (unix)
-        if: matrix.os != 'windows-latest'
+      - name: Build executable
         run: pyinstaller -F launcher.py
-
-      - name: Build executable (windows)
-        if: matrix.os == 'windows-latest'
-        run: pyoxidizer build
       
       - name: Create a Build Artifact (unix)
         uses: actions/upload-artifact@v2.2.4
@@ -73,7 +67,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         with:
           name: launcher-${{ matrix.os }}.exe
-          path: build/x86_64-pc-windows-msvc/debug/install/launcher.exe
+          path: dist/launcher.exe
 
       - name: Upload release assets (unix)
         uses: actions/upload-release-asset@v1
@@ -94,7 +88,7 @@ jobs:
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
           asset_name: launcher-${{ matrix.os }}.exe
-          asset_path: build/x86_64-pc-windows-msvc/debug/install/launcher.exe
+          asset_path: dist/launcher.exe
           asset_content_type: application/octet-stream
 
 
