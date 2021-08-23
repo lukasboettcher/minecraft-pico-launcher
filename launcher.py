@@ -419,12 +419,14 @@ class Start:
         last_username = None
         if os.path.exists(username_file_path):
             last_username = open(username_file_path).readline()
+        else:
+            last_username = input('Username: ')
 
 
         uuid = uuid4().hex if opts.uuid is None else opts.uuid.replace("-", "").lower()
-        username = uuid[:8] if opts.username is None else opts.username[:16]  # Max username length is 16
+        # username = uuid[:8] if opts.username is None else opts.username[:16]  # Max username length is 16
 
-        username = opts.username[:16] if opts.username is not None else uuid[:8] if last_username is None else last_username
+        username = opts.username[:16] if opts.username is not None else uuid[:8] if last_username is None or last_username == "" else last_username
 
         with open(username_file_path, 'w') as username_file:
             username_file.write(username)
