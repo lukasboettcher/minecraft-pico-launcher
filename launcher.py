@@ -995,11 +995,17 @@ if __name__ == "__main__":
         parser.add_argument("-i", "--uuid")
         parser.add_argument("-s", "--server")
         parser.add_argument("-p", "--server-port", type=int, metavar="PORT")
-        parser.add_argument("version", nargs="?", default="release")
+        parser.add_argument("version", nargs="?", default="")
         return parser
     
     def cmd_start(ns: Namespace, ctx: CliContext):
     
+        version_path = path.join(get_minecraft_dir(), 'last_version.dat')
+        if ns.version != "":
+            with open(version_path, 'w') as version_file:
+                version_file.write(ns.version)
+        ns.version = open(version_path).readline() if os.path.exists(version_path) else "release"
+        
         manifest = VersionManifest.load_from_url()
 
         version_id, _ = manifest.filter_latest(ns.version)
