@@ -443,6 +443,8 @@ class Start:
             "assets_index_name": self.version.assets_index_version,
             "auth_uuid": uuid,
             "auth_access_token": "" ,
+            "auth_xuid": "",
+            "clientid": "",
             "user_type": "mojang",
             "version_type": self.version.version_meta.get("type", ""),
             # Game (legacy)
